@@ -11,6 +11,9 @@ import commands
 
 router = APIRouter()
 
+# In-memory dedup: tracks message IDs already processed this session
+_processed_mids: set = set()
+
 
 def _verify_signature(body: bytes, signature_header: str) -> bool:
     if not config.FB_APP_SECRET:
@@ -65,6 +68,13 @@ async def _process_event(data: dict):
                     print(f"[webhook] First message — your PSID is: {psid}")
 
                 message = event.get("message", {})
+                mid = message.get("mid", "")
+                if mid and mid in _processed_mids:
+                    print(f"[webhook] Duplicate message {mid} — skipped")
+                    continue
+                if mid:
+                    _processed_mids.add(mid)
+
                 text = message.get("text", "").strip()
                 if not text:
                     continue
