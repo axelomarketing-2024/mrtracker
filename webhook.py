@@ -13,10 +13,12 @@ router = APIRouter()
 
 
 def _verify_signature(body: bytes, signature_header: str) -> bool:
+    if not config.FB_APP_SECRET:
+        return True
     if not signature_header or not signature_header.startswith("sha256="):
         return False
     expected = hmac.new(
-        config.FB_PAGE_ACCESS_TOKEN.encode(),
+        config.FB_APP_SECRET.encode(),
         body,
         hashlib.sha256,
     ).hexdigest()

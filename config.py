@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 FB_PAGE_ACCESS_TOKEN = os.getenv("FB_PAGE_ACCESS_TOKEN", "")
+FB_APP_SECRET = os.getenv("FB_APP_SECRET", "")
 FB_VERIFY_TOKEN = os.getenv("FB_VERIFY_TOKEN", "")
 FB_USER_PSID = os.getenv("FB_USER_PSID", "")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
